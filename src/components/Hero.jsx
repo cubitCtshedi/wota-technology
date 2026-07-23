@@ -17,8 +17,10 @@ export default function Hero() {
         poster="/assets/wota-bg-poster.jpg"
         aria-hidden="true"
       >
-        <source src="/assets/wota-bg.webm" type="video/webm" />
+        {/* mp4 first: it's ~1.2 MB and plays everywhere, vs the 2.9 MB webm.
+            Browsers use the first source they support, so this is the smaller download. */}
         <source src="/assets/wota-bg.mp4" type="video/mp4" />
+        <source src="/assets/wota-bg.webm" type="video/webm" />
       </video>
       <div className={`hero-word${showWord ? ' show' : ''}`} aria-hidden="true">
         WOTA
