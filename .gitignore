@@ -1,0 +1,8 @@
+node_modules
+dist
+*.local
+.DS_Store
+
+# Raw hero-video source frames — not referenced by the app; kept locally only.
+# The hero plays public/assets/wota-bg.mp4 / .webm, generated from these.
+public/assets/wota background/
