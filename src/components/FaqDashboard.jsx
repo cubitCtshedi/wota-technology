@@ -1,5 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
+import { m } from 'framer-motion';
 import { faqs } from '../data/faqs';
+import { Reveal } from '../lib/motion';
+
+// Weekly scan bars — [height, optional colour class]
+const bars = [
+  ['32%'],
+  ['48%'],
+  ['92%', 'hot'],
+  ['60%'],
+  ['74%', 'cy'],
+  ['40%'],
+  ['26%'],
+];
 
 function FaqItem({ q, a, open, onToggle }) {
   const answerRef = useRef(null);
@@ -32,25 +45,26 @@ export default function FaqDashboard() {
     <section id="faq" style={{ paddingTop: '20px' }}>
       <div className="wrap faq-grid">
         <div>
-          <h2>
+          <Reveal as="h2">
             Have Questions
             <br />
             About WOTA?
-          </h2>
+          </Reveal>
           <div className="faq-list">
             {faqs.map((item, i) => (
-              <FaqItem
-                key={item.q}
-                q={item.q}
-                a={item.a}
-                open={openIndex === i}
-                onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
-              />
+              <Reveal key={item.q} delay={i * 0.06}>
+                <FaqItem
+                  q={item.q}
+                  a={item.a}
+                  open={openIndex === i}
+                  onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
+                />
+              </Reveal>
             ))}
           </div>
         </div>
 
-        <div className="dash" aria-label="Example campaign dashboard">
+        <Reveal className="dash" aria-label="Example campaign dashboard" delay={0.1}>
           <div className="dash-chart">
             <div className="t">
               <div>
@@ -60,15 +74,26 @@ export default function FaqDashboard() {
               </div>
               <small>▲ live</small>
             </div>
-            <div className="bars">
-              <i style={{ height: '32%' }}></i>
-              <i style={{ height: '48%' }}></i>
-              <i className="hot" style={{ height: '92%' }}></i>
-              <i style={{ height: '60%' }}></i>
-              <i className="cy" style={{ height: '74%' }}></i>
-              <i style={{ height: '40%' }}></i>
-              <i style={{ height: '26%' }}></i>
-            </div>
+            <m.div
+              className="bars"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.5 }}
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.09, delayChildren: 0.15 } },
+              }}
+            >
+              {bars.map(([h, cls], i) => (
+                <m.i
+                  key={i}
+                  className={cls}
+                  style={{ height: h }}
+                  variants={{ hidden: { scaleY: 0 }, visible: { scaleY: 1 } }}
+                  transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                />
+              ))}
+            </m.div>
             <div className="bar-labels">
               <span>Mon</span>
               <span>Tue</span>
@@ -105,7 +130,7 @@ export default function FaqDashboard() {
               <span className="num">+642</span>
             </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

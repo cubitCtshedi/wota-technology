@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { projects } from '../data/projects';
+import { Reveal } from '../lib/motion';
 
 // "Real Projects. Real Hands. Real Engagement." — tabbed case studies.
 export default function Projects() {
@@ -8,17 +9,17 @@ export default function Projects() {
   return (
     <section id="projects" style={{ paddingTop: '20px' }}>
       <div className="wrap">
-        <h2>
+        <Reveal as="h2">
           Real Projects. Real Hands.
           <br />
           Real Engagement.
-        </h2>
-        <p className="muted" style={{ maxWidth: '560px', marginTop: '1rem' }}>
+        </Reveal>
+        <Reveal as="p" className="muted" style={{ maxWidth: '560px', marginTop: '1rem' }} delay={0.08}>
           One vehicle, many missions — here's how WOTA bottles have carried the message at the events
           and activations we've delivered.
-        </p>
+        </Reveal>
 
-        <div className="case-tabs" role="tablist">
+        <Reveal className="case-tabs" role="tablist" delay={0.12}>
           {projects.map((p) => (
             <button
               key={p.id}
@@ -30,7 +31,7 @@ export default function Projects() {
               {p.tab}
             </button>
           ))}
-        </div>
+        </Reveal>
 
         {projects.map((p) => (
           <div

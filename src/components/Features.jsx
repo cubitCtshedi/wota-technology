@@ -1,3 +1,5 @@
+import { Reveal } from '../lib/motion';
+
 // "Smart. Simple. Powerful." — the dark feature panel with three overlapping cards.
 const cards = [
   {
@@ -29,7 +31,7 @@ export default function Features() {
     <section id="about" className="feat-section">
       <div className="wrap">
         <div className="feat-panel">
-          <div className="dp-head">
+          <Reveal className="dp-head">
             <h2>
               Smart<span>.</span> Simple<span>.</span>
               <br />
@@ -39,11 +41,11 @@ export default function Features() {
               WOTA turns every bottle into a smart marketing channel — built for results, designed for
               impact.
             </p>
-          </div>
+          </Reveal>
         </div>
         <div className="dp-cards">
-          {cards.map((c) => (
-            <div key={c.cls} className={`dp-card ${c.cls} reveal`}>
+          {cards.map((c, i) => (
+            <Reveal key={c.cls} className={`dp-card ${c.cls}`} delay={i * 0.12}>
               <div className="dp-txt">
                 <h3>{c.title}</h3>
                 <p>{c.body}</p>
@@ -51,7 +53,7 @@ export default function Features() {
               <div className="card-media">
                 <img src={c.img} alt="" />
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

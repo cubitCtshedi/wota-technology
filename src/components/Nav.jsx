@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { useStickyNav } from '../hooks/useStickyNav';
 
 export default function Nav() {
   const scrolled = useStickyNav();
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
 
   return (
     <nav className={scrolled ? 'scrolled' : undefined}>
       <div className="wrap nav-inner">
-        <a className="logo" href="#top" aria-label="WOTA">
+        <a className="logo" href="#top" aria-label="WOTA" onClick={close}>
           W
           <svg className="flame" viewBox="0 0 24 30" aria-hidden="true">
             <defs>
@@ -27,11 +30,47 @@ export default function Nav() {
           <a href="#services">Products</a>
           <a href="#about">About WOTA</a>
           <a href="#faq">Sustainability</a>
-          <a href="#projects">Gallery</a>
+          <a href="#gallery">Gallery</a>
         </div>
         <div className="nav-right">
-          <a href="#contact" className="btn btn-line">
+          <a href="#contact" className="btn btn-line" onClick={close}>
             Get Started
+            <svg className="btn-arrow" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M5 12h14M13 6l6 6-6 6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+          <button
+            type="button"
+            className="nav-toggle"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
+
+        <div className={`nav-mobile${open ? ' open' : ''}`}>
+          <a href="#services" onClick={close}>
+            Products
+          </a>
+          <a href="#about" onClick={close}>
+            About WOTA
+          </a>
+          <a href="#faq" onClick={close}>
+            Sustainability
+          </a>
+          <a href="#gallery" onClick={close}>
+            Gallery
           </a>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { services } from '../data/services';
+import { Reveal } from '../lib/motion';
 
 // "Services Built Around One Powerful Vehicle" — the 7-card grid.
 export default function Services() {
@@ -15,14 +16,14 @@ export default function Services() {
           and the follow-up are the product.
         </p>
         <div className="svc-grid">
-          {services.map((s) => (
-            <div key={s.title} className="svc reveal">
+          {services.map((s, i) => (
+            <Reveal key={s.title} className="svc" delay={(i % 3) * 0.1}>
               <div className="ic">
                 <svg viewBox="0 0 24 24">{s.icon}</svg>
               </div>
               <h3>{s.title}</h3>
               <p>{s.body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

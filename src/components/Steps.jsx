@@ -1,4 +1,5 @@
 import { steps } from '../data/steps';
+import { Reveal } from '../lib/motion';
 
 // "4 Quick Steps From Bottle To Dashboard" — bottle stage + numbered list.
 export default function Steps() {
@@ -26,17 +27,17 @@ export default function Steps() {
           </div>
         </div>
         <div>
-          <h2>
+          <Reveal as="h2">
             4 Quick Steps
             <br />
             From Bottle To Dashboard
-          </h2>
+          </Reveal>
           <ul className="steps-list" style={{ marginTop: '2.2rem' }}>
-            {steps.map((s) => (
-              <li key={s.title} className={`reveal${s.hot ? ' hot' : ''}`}>
+            {steps.map((s, i) => (
+              <Reveal as="li" key={s.title} className={s.hot ? 'hot' : undefined} delay={i * 0.1}>
                 <h3>{s.title}</h3>
                 <p>{s.body}</p>
-              </li>
+              </Reveal>
             ))}
           </ul>
         </div>

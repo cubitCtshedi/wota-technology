@@ -1,9 +1,11 @@
+import { Reveal } from '../lib/motion';
+
 // "Start Your Campaign Now" — closing call-to-action panel.
 export default function Cta() {
   return (
     <section id="contact" style={{ paddingTop: '20px' }}>
       <div className="wrap">
-        <div className="cta-panel">
+        <Reveal className="cta-panel">
           <div className="cta-bottles" aria-hidden="true">
             <img className="b-back" src="/assets/white-bottle-cut.png" alt="" />
             <img className="b-front" src="/assets/bottle-cut.png" alt="" />
@@ -22,7 +24,7 @@ export default function Cta() {
               Get In Touch →
             </a>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

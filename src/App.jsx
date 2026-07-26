@@ -4,15 +4,12 @@ import Features from './components/Features';
 import Steps from './components/Steps';
 import Services from './components/Services';
 import Projects from './components/Projects';
+import Gallery from './components/Gallery';
 import FaqDashboard from './components/FaqDashboard';
 import Cta from './components/Cta';
 import Footer from './components/Footer';
-import { useScrollReveal } from './hooks/useScrollReveal';
 
 export default function App() {
-  // Reveal `.reveal` elements on scroll, once everything has mounted.
-  useScrollReveal();
-
   return (
     <>
       <Nav />
@@ -21,6 +18,7 @@ export default function App() {
       <Steps />
       <Services />
       <Projects />
+      <Gallery />
       <FaqDashboard />
       <Cta />
       <Footer />
