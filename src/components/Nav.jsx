@@ -27,9 +27,9 @@ export default function Nav() {
           T A
         </a>
         <div className="nav-links">
-          <a href="#services">Products</a>
           <a href="#about">About WOTA</a>
-          <a href="#faq">Sustainability</a>
+          <a href="#services">Services</a>
+          <a href="#projects">Projects</a>
           <a href="#gallery">Gallery</a>
         </div>
         <div className="nav-right">
@@ -60,14 +60,14 @@ export default function Nav() {
         </div>
 
         <div className={`nav-mobile${open ? ' open' : ''}`}>
-          <a href="#services" onClick={close}>
-            Products
-          </a>
           <a href="#about" onClick={close}>
             About WOTA
           </a>
-          <a href="#faq" onClick={close}>
-            Sustainability
+          <a href="#services" onClick={close}>
+            Services
+          </a>
+          <a href="#projects" onClick={close}>
+            Projects
           </a>
           <a href="#gallery" onClick={close}>
             Gallery
