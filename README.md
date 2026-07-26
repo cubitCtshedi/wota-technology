@@ -1,6 +1,6 @@
-# WOTA Technology — Marketing Website
+# WOTA Solutions — Marketing Website
 
-Marketing website for **WOTA Technology**, built as a **Vite + React** single-page app. Fonts load from Google Fonts (**Plus Jakarta Sans** for display headings, **Inter** for body; falls back to system fonts offline).
+Marketing website for **WOTA Solutions**, built as a **Vite + React** single-page app. Fonts load from Google Fonts (**Plus Jakarta Sans** for display headings, **Inter** for body; falls back to system fonts offline).
 
 ## Getting started
 
@@ -49,7 +49,7 @@ wota/
 
 ## Business context
 
-WOTA Technology is a South African marketing company that turns **QR-coded branded water bottles into physical-to-digital marketing touchpoints**. The core pitch: traditional branded merch generates an impression and nothing else — WOTA makes every bottle a trackable, attributable event.
+WOTA Solutions is a South African marketing company that turns **QR-coded branded water bottles into physical-to-digital marketing touchpoints**. The core pitch: traditional branded merch generates an impression and nothing else — WOTA makes every bottle a trackable, attributable event.
 
 **Funnel:** brand the bottle → distribute at events/retail/activations → customer scans QR → lands on branded page → details captured into a customer database → follow-up via email campaigns and digital retargeting.
 

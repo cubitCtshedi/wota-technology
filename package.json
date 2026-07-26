@@ -2,7 +2,7 @@
   "name": "wota-technology",
   "private": true,
   "version": "1.0.0",
-  "description": "WOTA Technology — physical-to-digital marketing site.",
+  "description": "WOTA Solutions — physical-to-digital marketing site.",
   "type": "module",
   "scripts": {
     "dev": "vite",

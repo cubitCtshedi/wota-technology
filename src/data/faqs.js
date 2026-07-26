@@ -1,7 +1,7 @@
 // FAQ accordion items. The first item starts open (matches the original markup).
 export const faqs = [
   {
-    q: 'What is WOTA Technology?',
+    q: 'What is WOTA Solutions?',
     a: 'WOTA is a marketing company that uses branded water bottles as a vehicle to transport messages. Your brand goes on the front, sponsors and a smart QR code on the back — and every scan is counted on your campaign dashboard.',
   },
   {
