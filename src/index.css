@@ -419,11 +419,13 @@ nav.scrolled .nav-links a{text-shadow:none}
 .site-footer::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(60% 80% at 96% 26%,rgba(23,187,223,.14),transparent 62%)}
 /* underwater bottle image bleeding in from the right */
-.footer-media{position:absolute;top:0;right:0;bottom:0;width:min(56%,860px);z-index:0;pointer-events:none}
-.footer-media img{width:100%;height:100%;object-fit:cover;object-position:center}
+/* full-bleed image, faded smoothly to the left — no hard band edge / seam */
+.footer-media{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.footer-media img{width:100%;height:100%;object-fit:cover;object-position:72% center}
 .footer-media::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,#05070A 0%,rgba(5,7,10,.86) 18%,rgba(5,7,10,.35) 42%,transparent 70%),
-  linear-gradient(0deg,#05070A 0%,transparent 26%)}
+  background:linear-gradient(90deg,#05070A 0%,#05070A 22%,rgba(5,7,10,.72) 50%,rgba(5,7,10,.22) 78%,transparent 100%),
+  linear-gradient(0deg,#05070A 0%,transparent 22%),
+  linear-gradient(180deg,#05070A 0%,transparent 15%)}
 .footer-inner{position:relative;z-index:1}
 .footer-logo{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--display);font-weight:800;
   font-size:clamp(2rem,3.4vw,2.6rem);letter-spacing:.09em;color:#fff;text-decoration:none}
@@ -453,7 +455,7 @@ nav.scrolled .nav-links a{text-shadow:none}
 .footer-social a:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
 .footer-social svg{width:17px;height:17px}
 @media(max-width:900px){
-  .footer-media{width:78%;opacity:.42}
+  .footer-media{opacity:.5}
   .footer-cols{grid-template-columns:1fr 1fr;gap:2.2rem 1.5rem;margin-top:3.4rem}
   .footer-base{flex-direction:column;align-items:flex-start;gap:1.2rem;margin-top:3.4rem}
 }
