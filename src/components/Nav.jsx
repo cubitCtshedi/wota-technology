@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStickyNav } from '../hooks/useStickyNav';
 
@@ -6,10 +6,29 @@ export default function Nav() {
   const scrolled = useStickyNav();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const innerRef = useRef(null);
+
+  // While the mobile menu is open, close it when the user clicks/taps outside
+  // the nav pill or presses Escape.
+  useEffect(() => {
+    if (!open) return undefined;
+    const onPointer = (e) => {
+      if (innerRef.current && !innerRef.current.contains(e.target)) close();
+    };
+    const onKey = (e) => {
+      if (e.key === 'Escape') close();
+    };
+    document.addEventListener('pointerdown', onPointer);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onPointer);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
 
   return (
     <nav className={scrolled ? 'scrolled' : undefined}>
-      <div className="wrap nav-inner">
+      <div className="wrap nav-inner" ref={innerRef}>
         <Link className="logo" to="/" aria-label="WOTA" onClick={close}>
           <img className="flame" src="/assets/wota-mark.png" alt="WOTA" />
         </Link>
