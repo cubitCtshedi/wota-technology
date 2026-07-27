@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Reveal } from '../lib/motion';
 
 // Footer link columns — [label, href]
@@ -5,19 +6,19 @@ const columns = [
   {
     title: 'Products',
     links: [
-      ['Branded Bottles', '#services'],
-      ['QR Technology', '#services'],
-      ['Campaigns', '#projects'],
-      ['Analytics', '#faq'],
+      ['Branded Bottles', '/#services'],
+      ['QR Technology', '/#services'],
+      ['Campaigns', '/#projects'],
+      ['Analytics', '/#faq'],
     ],
   },
   {
     title: 'Company',
     links: [
-      ['About WOTA', '#about'],
-      ['Our Mission', '#about'],
-      ['Case Studies', '#projects'],
-      ['Contact Us', '#contact'],
+      ['About WOTA', '/#about'],
+      ['Our Mission', '/#about'],
+      ['Case Studies', '/#projects'],
+      ['Contact Us', '/contact'],
     ],
   },
   {
@@ -40,23 +41,9 @@ export default function Footer() {
 
       <div className="wrap footer-inner">
         <Reveal className="footer-brand">
-          <a className="footer-logo" href="#top" aria-label="WOTA">
-            W
-            <svg className="flame" viewBox="0 0 24 30" aria-hidden="true">
-              <defs>
-                <linearGradient id="wflame-foot" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stopColor="#9CF0D2" />
-                  <stop offset=".55" stopColor="#17BBDF" />
-                  <stop offset="1" stopColor="#0E7FA8" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M13 0c.6 5-3 7-3 11 0-2-1.1-3-2-4-.5 2-3 4-3 8a8 8 0 0 0 16 0c0-5-4-7-5-11-.3 2-1.6 3-2.6 3.6C12 14 13.7 5 13 0Z"
-                fill="url(#wflame-foot)"
-              />
-            </svg>
-            T A
-          </a>
+          <Link className="footer-logo" to="/" aria-label="WOTA">
+            <img src="/assets/wota-logo-white.png" alt="WOTA" />
+          </Link>
           <p className="footer-tagline">Every Sip. Every Scan. Every Impact.</p>
           <p className="footer-lead">
             We don't sell water — we turn every bottle into a marketing channel. Smart QR technology
@@ -74,7 +61,7 @@ export default function Footer() {
               <ul>
                 {col.links.map(([label, href]) => (
                   <li key={label}>
-                    <a href={href}>{label}</a>
+                    <Link to={href}>{label}</Link>
                   </li>
                 ))}
               </ul>
@@ -100,7 +87,7 @@ export default function Footer() {
                 <path d="M4.98 3.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.8-1.95 3.7-1.95 3.96 0 4.7 2.4 4.7 5.5V21h-4v-5.3c0-1.26-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.8V21H9z" />
               </svg>
             </a>
-            <a href="mailto:hello@wota.technology" aria-label="Email">
+            <a href="mailto:info@wota.africa" aria-label="Email">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <rect x="3" y="5" width="18" height="14" rx="2" />
                 <path d="m3.5 7 8.5 6 8.5-6" />

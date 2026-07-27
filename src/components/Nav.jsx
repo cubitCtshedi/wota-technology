@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useStickyNav } from '../hooks/useStickyNav';
 
 export default function Nav() {
@@ -9,31 +10,17 @@ export default function Nav() {
   return (
     <nav className={scrolled ? 'scrolled' : undefined}>
       <div className="wrap nav-inner">
-        <a className="logo" href="#top" aria-label="WOTA" onClick={close}>
-          W
-          <svg className="flame" viewBox="0 0 24 30" aria-hidden="true">
-            <defs>
-              <linearGradient id="wflame" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="#9CF0D2" />
-                <stop offset=".55" stopColor="#17BBDF" />
-                <stop offset="1" stopColor="#0E7FA8" />
-              </linearGradient>
-            </defs>
-            <path
-              d="M13 0c.6 5-3 7-3 11 0-2-1.1-3-2-4-.5 2-3 4-3 8a8 8 0 0 0 16 0c0-5-4-7-5-11-.3 2-1.6 3-2.6 3.6C12 14 13.7 5 13 0Z"
-              fill="url(#wflame)"
-            />
-          </svg>
-          T A
-        </a>
+        <Link className="logo" to="/" aria-label="WOTA" onClick={close}>
+          <img className="flame" src="/assets/wota-mark.png" alt="WOTA" />
+        </Link>
         <div className="nav-links">
-          <a href="#about">About WOTA</a>
-          <a href="#services">Services</a>
-          <a href="#projects">Projects</a>
-          <a href="#gallery">Gallery</a>
+          <Link to="/#about">About WOTA</Link>
+          <Link to="/#services">Services</Link>
+          <Link to="/#projects">Projects</Link>
+          <Link to="/#gallery">Gallery</Link>
         </div>
         <div className="nav-right">
-          <a href="#contact" className="btn btn-line" onClick={close}>
+          <Link to="/contact" className="btn btn-line" onClick={close}>
             Get Started
             <svg className="btn-arrow" viewBox="0 0 24 24" aria-hidden="true">
               <path
@@ -45,7 +32,7 @@ export default function Nav() {
                 strokeLinejoin="round"
               />
             </svg>
-          </a>
+          </Link>
           <button
             type="button"
             className="nav-toggle"
@@ -60,18 +47,21 @@ export default function Nav() {
         </div>
 
         <div className={`nav-mobile${open ? ' open' : ''}`}>
-          <a href="#about" onClick={close}>
+          <Link to="/#about" onClick={close}>
             About WOTA
-          </a>
-          <a href="#services" onClick={close}>
+          </Link>
+          <Link to="/#services" onClick={close}>
             Services
-          </a>
-          <a href="#projects" onClick={close}>
+          </Link>
+          <Link to="/#projects" onClick={close}>
             Projects
-          </a>
-          <a href="#gallery" onClick={close}>
+          </Link>
+          <Link to="/#gallery" onClick={close}>
             Gallery
-          </a>
+          </Link>
+          <Link to="/contact" onClick={close}>
+            Contact
+          </Link>
         </div>
       </div>
     </nav>

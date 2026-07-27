@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Reveal } from '../lib/motion';
 
 // "Start Your Campaign Now" — closing call-to-action panel.
@@ -20,9 +21,9 @@ export default function Cta() {
               Tell us about your event, activation or sponsorship — we'll design the bottle, load the QR
               destination and set up your engagement dashboard.
             </p>
-            <a className="btn btn-white" href="mailto:hello@wota.technology">
+            <Link className="btn btn-white" to="/contact">
               Get In Touch →
-            </a>
+            </Link>
           </div>
         </Reveal>
       </div>

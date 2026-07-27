@@ -8,3 +8,6 @@ dist
 public/assets/wota background/
 
 .vercel
+
+# Resend API key for the contact form — created directly on the server only
+public/secrets.php

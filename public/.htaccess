@@ -1,0 +1,32 @@
+# Afrihost / Apache config for the WOTA single-page app.
+# Uploaded to public_html alongside index.html and contact.php.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Force HTTPS (Afrihost issues a free SSL cert per domain)
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Serve real files and folders as-is (index.html, contact.php, /assets/*, …)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else is a client-side route → hand back the SPA entry point
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Never expose the Resend key file over HTTP (PHP include() still works — that's
+# filesystem-level, not an HTTP request).
+<FilesMatch "^(secrets|.*\.sample)\.php$">
+  Require all denied
+</FilesMatch>
+
+# Long-cache the fingerprinted build assets
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2?|otf|ttf|png|jpe?g|webp|svg|mp4|webm)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
