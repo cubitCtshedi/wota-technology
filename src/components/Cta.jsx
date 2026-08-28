@@ -8,8 +8,8 @@ export default function Cta() {
       <div className="wrap">
         <Reveal className="cta-panel">
           <div className="cta-bottles" aria-hidden="true">
-            <img className="b-back" src="/assets/white-bottle-cut.png" alt="" />
-            <img className="b-front" src="/assets/bottle-cut.png" alt="" />
+            <img className="b-back" src="/assets/NO-QR-CODE.png" alt="" />
+            <img className="b-front" src="/assets/Front-of-bottle.png" alt="" />
           </div>
           <div className="cta-copy">
             <h2>

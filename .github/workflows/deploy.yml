@@ -1,0 +1,37 @@
+name: Deploy to Afrihost
+
+# Build the site on GitHub, then upload dist/ to Afrihost over FTPS.
+# Runs on every push to main, or manually from the Actions tab.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Upload to Afrihost via FTPS
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/
+          # If your FTP account lands INSIDE public_html, change this to ./
+          server-dir: public_html/
+          # Never let a deploy delete the server-only Resend key
+          exclude: |
+            **/secrets.php
+            **/.ftp-deploy-sync-state.json

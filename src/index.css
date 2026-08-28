@@ -300,7 +300,7 @@ nav.scrolled .nav-links a{text-shadow:none}
 .card-media img{position:absolute;left:50%;width:auto;filter:drop-shadow(0 20px 40px rgba(0,0,0,.6))}
 .dp-card.c1 .card-media img{height:430px;bottom:-64px;transform:translateX(-48%)}
 .dp-card.c2 .card-media img{height:440px;bottom:-72px;transform:translateX(-50%)}
-.dp-card.c3 .card-media img{height:400px;bottom:-30px;transform:translateX(-48%)}
+.dp-card.c3 .card-media img{height:470px;bottom:-100px;transform:translateX(-48%)}
 @media(max-width:920px){.dp-cards{grid-template-columns:1fr;margin-top:-280px}.feat-section{padding:64px 0}.feat-panel{padding:44px 26px 330px}.dp-head{flex-direction:column;align-items:flex-start}}
 /* shorter cards on phones — same style, but the WHOLE bottle fits inside the
    card (contained, base sitting just above the card edge) instead of cropped */

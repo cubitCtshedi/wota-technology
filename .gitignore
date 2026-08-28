@@ -3,9 +3,14 @@ dist
 *.local
 .DS_Store
 
+# FTP deploy credentials + generated upload package
+.env
+wota-afrihost.zip
+
 # Raw hero-video source frames — not referenced by the app; kept locally only.
 # The hero plays public/assets/wota-bg.mp4 / .webm, generated from these.
-public/assets/wota background/
+# Moved out of public/ so production builds don't ship ~112MB of frames.
+_raw/
 
 .vercel
 

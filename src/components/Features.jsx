@@ -10,19 +10,19 @@ const cards = [
       </>
     ),
     body: 'A full-wrap label designed around your identity or event theme — your look and feel, on something every guest actually wants.',
-    img: '/assets/card-bottle-1.png',
+    img: '/assets/Front-of-bottle.png',
   },
   {
     cls: 'c2',
-    title: 'Sponsor Real Estate',
-    body: 'Partner and sponsor logos printed on the back label alongside the barcode and ingredients — guaranteed hand-held visibility all event long.',
-    img: '/assets/card-bottle-2.png',
+    title: 'The Smart QR Code',
+    body: 'Links to your programme, menu, offer or sign-up page — and counts every single scan, so your message travels and reports back.',
+    img: '/assets/NO-LOGO.png',
   },
   {
     cls: 'c3',
-    title: 'The Smart QR Code',
-    body: 'Links to your programme, menu, offer or sign-up page — and counts every single scan, so your message travels and reports back.',
-    img: '/assets/card-bottle-3.png',
+    title: 'Sponsor Real Estate',
+    body: 'Partner and sponsor logos printed on the back label alongside the barcode and ingredients — guaranteed hand-held visibility all event long.',
+    img: '/assets/NO-QR-CODE.png',
   },
 ];
 
