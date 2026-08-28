@@ -29,10 +29,10 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           local-dir: ./dist/
-          # Docroot of the home.wota.africa subdomain = the `home` folder at the
-          # account root (sibling of public_html). FTP lands in the account home
-          # dir, so the path is just home/. WordPress in public_html is untouched.
-          server-dir: home/
+          # Using a dedicated FTP account scoped to the home.wota.africa docroot,
+          # so it logs straight into the site folder → upload to ./
+          # (If you use the master cPanel account instead, this would be home/.)
+          server-dir: ./
           # Never let a deploy delete the server-only Resend key
           exclude: |
             **/secrets.php

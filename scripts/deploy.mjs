@@ -56,11 +56,16 @@ try {
     secureOptions: { rejectUnauthorized: false }, // shared hosts often use their own cert
   });
 
-  console.log(`→ Uploading dist/ → ${FTP_REMOTE_DIR} …`);
+  const remote = (FTP_REMOTE_DIR || '.').trim();
+  console.log(`→ Uploading dist/ → ${remote === '.' || remote === '/' ? '(login dir)' : remote} …`);
   client.trackProgress((info) => {
     if (info.name) process.stdout.write(`   ${info.type} ${info.name}\r`);
   });
-  await client.ensureDir(FTP_REMOTE_DIR);
+  // A docroot-scoped FTP account logs straight into the site folder — upload
+  // into the login dir itself. Only descend when a real subfolder is given.
+  if (remote && remote !== '.' && remote !== '/') {
+    await client.ensureDir(remote);
+  }
   await client.uploadFromDir(distDir);
   client.trackProgress();
 

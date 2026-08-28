@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const INTERESTS = [
   'Event or activation',
@@ -10,8 +10,12 @@ const INTERESTS = [
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PHONE_RE = /^[+\d][\d\s()-]{6,}$/; // loose: digits/space/()/-/+, 7+ chars
 const CONTACT_EMAIL = 'info@wota.africa';
 const ENDPOINT = '/contact.php';
+
+// Field length bounds — kept in sync with the same limits in contact.php.
+const LIMITS = { name: 80, email: 120, company: 100, phone: 30, message: 2000 };
 
 const empty = {
   name: '',
@@ -28,6 +32,7 @@ export default function ContactForm() {
   const [values, setValues] = useState(empty);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle | sending | sent | error
+  const mountedAt = useRef(Date.now()); // for the server-side time-trap
 
   const update = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,15 +40,57 @@ export default function ContactForm() {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
+  // Validate a single field — used both on blur and on submit.
+  const validateField = (field, v) => {
+    switch (field) {
+      case 'name': {
+        const s = v.name.trim();
+        if (!s) return 'Please tell us your name.';
+        if (s.length < 2) return 'That looks a little short.';
+        if (s.length > LIMITS.name) return 'That name is too long.';
+        return undefined;
+      }
+      case 'email': {
+        const s = v.email.trim();
+        if (!s) return 'We need an email to reply to.';
+        if (!EMAIL_RE.test(s) || s.length > LIMITS.email) return 'That email doesn’t look right.';
+        return undefined;
+      }
+      case 'phone': {
+        const s = v.phone.trim();
+        if (s && !PHONE_RE.test(s)) return 'That phone number looks off.';
+        return undefined;
+      }
+      case 'interest':
+        if (!v.interest) return 'Pick the option that fits best.';
+        if (!INTERESTS.includes(v.interest)) return 'Pick the option that fits best.';
+        return undefined;
+      case 'message': {
+        const s = v.message.trim();
+        if (!s) return 'A short message helps us prepare.';
+        if (s.length < 10) return 'A little more detail, please.';
+        if (s.length > LIMITS.message) return 'That’s a bit long — please trim it down.';
+        return undefined;
+      }
+      case 'consent':
+        return v.consent ? undefined : 'Please allow us to get back to you.';
+      default:
+        return undefined;
+    }
+  };
+
+  // Show a field's error when the user leaves it.
+  const onBlur = (e) => {
+    const { name } = e.target;
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, values) }));
+  };
+
   const validate = () => {
     const next = {};
-    if (!values.name.trim()) next.name = 'Please tell us your name.';
-    if (!values.email.trim()) next.email = 'We need an email to reply to.';
-    else if (!EMAIL_RE.test(values.email.trim())) next.email = 'That email doesn’t look right.';
-    if (!values.interest) next.interest = 'Pick the option that fits best.';
-    if (!values.message.trim()) next.message = 'A short message helps us prepare.';
-    else if (values.message.trim().length < 10) next.message = 'A little more detail, please.';
-    if (!values.consent) next.consent = 'Please allow us to get back to you.';
+    for (const field of ['name', 'email', 'phone', 'interest', 'message', 'consent']) {
+      const err = validateField(field, values);
+      if (err) next[field] = err;
+    }
     return next;
   };
 
@@ -80,7 +127,10 @@ export default function ContactForm() {
       const res = await fetch(ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          elapsed: Math.round((Date.now() - mountedAt.current) / 1000),
+        }),
       });
       const data = await res.json().catch(() => ({}));
 
@@ -154,8 +204,10 @@ export default function ContactForm() {
             name="name"
             type="text"
             autoComplete="name"
+            maxLength={LIMITS.name}
             value={values.name}
             onChange={update}
+            onBlur={onBlur}
             aria-invalid={errors.name ? 'true' : undefined}
             placeholder="Jane Mokoena"
           />
@@ -168,8 +220,10 @@ export default function ContactForm() {
             name="email"
             type="email"
             autoComplete="email"
+            maxLength={LIMITS.email}
             value={values.email}
             onChange={update}
+            onBlur={onBlur}
             aria-invalid={errors.email ? 'true' : undefined}
             placeholder="jane@brand.com"
           />
@@ -185,6 +239,7 @@ export default function ContactForm() {
             name="company"
             type="text"
             autoComplete="organization"
+            maxLength={LIMITS.company}
             value={values.company}
             onChange={update}
             placeholder="Optional"
@@ -197,10 +252,14 @@ export default function ContactForm() {
             name="phone"
             type="tel"
             autoComplete="tel"
+            maxLength={LIMITS.phone}
             value={values.phone}
             onChange={update}
+            onBlur={onBlur}
+            aria-invalid={errors.phone ? 'true' : undefined}
             placeholder="Optional"
           />
+          {errors.phone && <span className="field-err">{errors.phone}</span>}
         </div>
       </div>
 
@@ -211,6 +270,7 @@ export default function ContactForm() {
           name="interest"
           value={values.interest}
           onChange={update}
+          onBlur={onBlur}
           aria-invalid={errors.interest ? 'true' : undefined}
         >
           <option value="" disabled>
@@ -231,8 +291,10 @@ export default function ContactForm() {
           id="cf-message"
           name="message"
           rows={5}
+          maxLength={LIMITS.message}
           value={values.message}
           onChange={update}
+          onBlur={onBlur}
           aria-invalid={errors.message ? 'true' : undefined}
           placeholder="Tell us about your event, activation or the brands involved…"
         />

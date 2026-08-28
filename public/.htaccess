@@ -1,5 +1,5 @@
 # Afrihost / Apache config for the WOTA single-page app.
-# Uploaded to public_html alongside index.html and contact.php.
+# Lives in the home.wota.africa docroot, alongside index.html and contact.php.
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -17,12 +17,6 @@
   # Everything else is a client-side route → hand back the SPA entry point
   RewriteRule ^ index.html [L]
 </IfModule>
-
-# Never expose the Resend key file over HTTP (PHP include() still works — that's
-# filesystem-level, not an HTTP request).
-<FilesMatch "^(secrets|.*\.sample)\.php$">
-  Require all denied
-</FilesMatch>
 
 # Long-cache the fingerprinted build assets
 <IfModule mod_headers.c>

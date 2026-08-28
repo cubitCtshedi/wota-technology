@@ -13,6 +13,3 @@ wota-afrihost.zip
 _raw/
 
 .vercel
-
-# Resend API key for the contact form — created directly on the server only
-public/secrets.php
