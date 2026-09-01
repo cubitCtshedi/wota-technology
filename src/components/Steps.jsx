@@ -13,10 +13,17 @@ export default function Steps() {
           <div className="orbit o2">
             <span className="dot"></span>
           </div>
+          {/* Intrinsic width/height let the browser reserve the right box before
+              the image loads — CSS sizes it by height, so the ratio comes from
+              these. Section sits well below the fold, hence lazy. */}
           <img
             className="real-bottle"
-            src="/assets/bottle-cut.png"
-            alt="WOTA branded water bottle"
+            src="/assets/bottle-still-water.webp"
+            width="394"
+            height="1400"
+            loading="lazy"
+            decoding="async"
+            alt="A WOTA still water bottle with the brand label on the front"
           />
           <div className="fcard fc1" style={{ top: '8%' }}>
             <span className="fic">✓</span>
