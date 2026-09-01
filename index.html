@@ -1,16 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-ZA">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WOTA Solutions — The Next Big Thing In Physical-To-Digital Marketing</title>
-<meta name="description" content="WOTA Solutions turns branded water bottles into a measurable marketing channel. Your brand on the front, sponsors and a smart QR code on the back, engagement data on your dashboard.">
+
+<!-- Everything between these markers is replaced per route by
+     scripts/prerender.mjs at build time. What sits here is the dev-server
+     default (and the homepage's values, so a stray un-prerendered file is
+     still sane). Do not remove the markers. -->
+<!--seo-->
+<title>WOTA Solutions | Branded Bottles, Smart QR, Real Engagement</title>
+<meta name="description" content="WOTA turns branded water bottles into a measurable marketing channel: your brand on the front, sponsors and a trackable QR code on the back, every scan reported on your campaign dashboard.">
+<link rel="canonical" href="https://home.wota.africa/">
+<!--/seo-->
+
 <link rel="icon" type="image/png" href="/assets/wota-mark.png">
 <link rel="apple-touch-icon" href="/assets/wota-mark.png">
 <meta name="theme-color" content="#1D1D1B">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- The hero poster is the LCP element on almost every first visit -->
+<link rel="preload" as="image" href="/assets/wota-bg-poster.jpg" fetchpriority="high">
 </head>
 <body>
 <div id="root"></div>

@@ -1,5 +1,10 @@
-# Afrihost / Apache config for the WOTA single-page app.
+# Afrihost / Apache config for the WOTA site.
 # Lives in the home.wota.africa docroot, alongside index.html and contact.php.
+
+# Directory listings are never wanted, and mod_dir's automatic trailing-slash
+# redirect would bounce /contact -> /contact/ and split the canonical URL.
+Options -Indexes
+DirectorySlash Off
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -9,18 +14,67 @@
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-  # Serve real files and folders as-is (index.html, contact.php, /assets/*, …)
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d
+  # One canonical spelling per page, so link equity never splits:
+  #   /index.html and /contact/index.html  -> the clean path
+  #   /contact/                            -> /contact
+  RewriteCond %{THE_REQUEST} \s/.+/index\.html[\s?] [NC]
+  RewriteRule ^(.+)/index\.html$ /$1 [L,R=301]
+  RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
+  RewriteRule ^index\.html$ / [L,R=301]
+  RewriteCond %{THE_REQUEST} \s/(.+)/[\s?] [NC]
+  RewriteRule ^(.+)/$ /$1 [L,R=301]
+
+  # Serve real files as-is (contact.php, /assets/*, sitemap.xml, robots.txt, …)
+  RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
 
-  # Everything else is a client-side route → hand back the SPA entry point
-  RewriteRule ^ index.html [L]
+  # Prerendered routes: /contact -> /contact/index.html, served in place so the
+  # visitor keeps the clean URL and gets static HTML with its own <head>.
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.*)$ /$1/index.html [L]
+
+  # Anything left is either a client-side route we have not prerendered or a
+  # dead link. Hand it to the SPA, which renders the noindex 404 page for
+  # unknown paths.
+  RewriteRule ^ /index.html [L]
 </IfModule>
 
-# Long-cache the fingerprinted build assets
+# Real 404s (paths Apache resolves itself, e.g. a missing asset)
+ErrorDocument 404 /404.html
+
 <IfModule mod_headers.c>
-  <FilesMatch "\.(js|css|woff2?|otf|ttf|png|jpe?g|webp|svg|mp4|webm)$">
+  # Fingerprinted build output — safe to cache forever.
+  <FilesMatch "^index-[A-Za-z0-9_-]+\.(js|css)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
+
+  # Media and fonts keep stable filenames, so cache them hard but not forever.
+  <FilesMatch "\.(woff2?|otf|ttf|png|jpe?g|webp|svg|ico|mp4|webm)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+
+  # HTML and the crawl-control files must never be stale: a cached sitemap or
+  # robots.txt would keep search engines on a build that no longer exists.
+  <FilesMatch "\.(html|xml|txt|json)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Permissions-Policy "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+</IfModule>
+
+# Smaller responses = faster Core Web Vitals, which Google scores directly.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml \
+    application/javascript application/json application/ld+json \
+    application/xml application/rss+xml image/svg+xml
+</IfModule>
+
+# Make sure the crawl files are served as the types crawlers expect.
+<IfModule mod_mime.c>
+  AddType application/xml .xml
+  AddType text/plain .txt
+  AddDefaultCharset UTF-8
 </IfModule>

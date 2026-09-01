@@ -15,6 +15,13 @@ export default function Hero() {
 
   return (
     <header className="hero" id="top">
+      {/* The visible hero is a video plus a type treatment, so the page's one
+          <h1> lives here for screen readers, search engines and AI crawlers.
+          Everything below it is <h2>, keeping the outline valid. */}
+      <h1 className="sr-only">
+        WOTA Solutions — branded water bottles with smart QR codes that turn every event guest into
+        measurable engagement
+      </h1>
       <video
         ref={videoRef}
         className="hero-video"

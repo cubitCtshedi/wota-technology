@@ -15,16 +15,28 @@ npm run preview  # preview the production build
 
 ```
 wota/
-├── index.html                 # Vite entry: <head> (fonts/meta) + #root mount
-├── vite.config.js             # Vite + @vitejs/plugin-react
+├── index.html                 # Vite entry: <head> shell with <!--seo--> markers + #root
+├── vite.config.js             # Vite + React, plus clean-URL preview middleware
 ├── package.json
+├── scripts/
+│   ├── prerender.mjs          # static HTML per route + sitemap/robots/llms.txt
+│   └── deploy.mjs             # FTP upload of dist/ to Afrihost
 ├── public/
+│   ├── .htaccess              # HTTPS, canonical URLs, caching, 404, gzip
+│   ├── contact.php            # contact-form endpoint
 │   └── assets/                # images + hero video (served at /assets/…)
 └── src/
-    ├── main.jsx               # React root, imports index.css
-    ├── App.jsx                # composes the page sections
-    ├── index.css              # all global styles (unchanged from the original)
+    ├── main.jsx               # React root (browser), imports index.css
+    ├── entry-server.jsx       # React root (build-time prerender only)
+    ├── App.jsx                # routes: /, /contact, 404
+    ├── index.css              # all global styles
+    ├── lib/
+    │   ├── site.js            #   SEO source of truth: URLs, copy, JSON-LD
+    │   ├── head.js            #   builds a route's head tags as data
+    │   └── motion.jsx         #   shared scroll-reveal wrapper
+    ├── pages/                 # Home.jsx, Contact.jsx, NotFound.jsx
     ├── components/            # one file per section
+    │   ├── Seo.jsx            #   reapplies head tags on client-side nav
     │   ├── Nav.jsx            #   sticky navigation
     │   ├── Hero.jsx           #   full-viewport hero (video + WOTA wordmark)
     │   ├── Features.jsx       #   "Smart. Simple. Powerful." dark panel
@@ -36,11 +48,11 @@ wota/
     │   └── Footer.jsx
     ├── hooks/                 # reusable behaviour
     │   ├── useStickyNav.js    #   transparent → solid nav on scroll
-    │   ├── useScrollReveal.js #   IntersectionObserver reveal-on-scroll
     │   └── useHeroWord.js     #   reveal the wordmark when the bottle lands
     └── data/                  # section content as data
         ├── services.jsx
         ├── projects.jsx
+        ├── gallery.js
         ├── steps.js
         └── faqs.js
 ```
@@ -88,10 +100,86 @@ Change the palette there if the photo ever suggests different shades.
   - Scroll reveals: elements tagged `.reveal` fade/slide up via a single `IntersectionObserver` (inline script at the bottom of `index.html`), auto-staggered 90ms between siblings.
   - Dashboard: KPI numbers count up (`.count` with `data-target`/`data-suffix`) and bars grow to `--h` when the dash scrolls into view.
 - **Gotcha**: `background-clip: text` must sit on the individual `.hero-word i` letters, not the parent — Chromium fails to paint the clipped gradient under transformed/animated children.
-- The same photo is referenced as the Open Graph share image (`og:image`). Note: `og:image` is a relative path — swap it for an absolute URL once the site has a domain.
+- The Open Graph share image is now an absolute URL built from `SITE_URL` in `src/lib/site.js` — see the SEO section below.
 - Responsive breakpoints at **980px** (hero stacks: bottle art on top, info/CTAs/steps flow below; social rail hides; grids go 2-up; nav links hide) and **600px** (everything single-column, tighter spacing).
 - The nav/footer logo is an inline SVG droplet in the brand gradient; the favicon is the same shape as a data URI.
 - CTA mailto points at `hello@wota.co.za` — placeholder, update when the real address exists.
+
+## SEO, GEO & AEO
+
+Everything that search engines and AI answer engines read is derived from **one
+file**: [`src/lib/site.js`](src/lib/site.js). Change the canonical domain, a page
+title, a description or the service list there and the meta tags, the structured
+data, `sitemap.xml` and `llms.txt` all follow. Nothing is hand-maintained twice.
+
+### The build now has three stages
+
+```
+npm run build
+  ├─ build:client   vite build                     -> dist/ (the SPA)
+  ├─ build:server   vite build --ssr               -> dist-ssr/entry-server.js
+  └─ prerender      node scripts/prerender.mjs     -> static HTML + crawl files
+```
+
+The prerender stage is the important one. Googlebot runs JavaScript, but most of
+the crawlers behind ChatGPT, Claude, Perplexity and Copilot do **not** — an empty
+`<div id="root">` reads to them as a blank page, and a blank page is never cited.
+So every route is rendered to a static HTML file with the real copy in the source:
+
+| File | Route |
+| --- | --- |
+| `dist/index.html` | `/` |
+| `dist/contact/index.html` | `/contact` |
+| `dist/404.html` | `ErrorDocument 404`, and any unmatched path via the SPA |
+
+The browser still boots with `createRoot` (not `hydrateRoot`), so React discards
+that markup and mounts fresh — no hydration mismatches from the video timing or
+the scroll hooks. The static output exists for crawlers. The hero `<video>` is
+stripped from it so the 1.2 MB clip isn't fetched twice.
+
+### What each page carries
+
+- Title, description, keywords, canonical, `robots`, and `geo.region`/`geo.placename` for South Africa
+- Open Graph + Twitter card, with an absolute 1280x720 image
+- JSON-LD (`@graph`): `Organization`, `WebSite`, `WebPage`/`ContactPage`,
+  `BreadcrumbList`, `Service` with a 7-item `OfferCatalog`, and `FAQPage`
+
+`FAQPage` is the highest-leverage block for answer engines — it hands them a
+pre-written question-and-answer pair to quote, generated straight from
+`src/data/faqs.js`.
+
+`src/components/Seo.jsx` reapplies the same tags after a client-side navigation,
+so a link shared from `/contact` doesn't preview as the homepage. It patches tags
+in place and drops any it set on the previous route.
+
+### Generated crawl files
+
+- **`sitemap.xml`** — indexable routes only, with `lastmod` set at build time and image entries.
+- **`robots.txt`** — allows everything, plus 20 AI crawlers named individually (`GPTBot`, `ClaudeBot`, `PerplexityBot`, `Google-Extended`, …), because most of them ignore the `User-agent: *` group. Points at the sitemap.
+- **`llms.txt`** — the [llmstxt.org](https://llmstxt.org) convention: one markdown file an LLM can read end-to-end instead of scraping. Leads with the fact WOTA gets asked about most — that it does *not* sell water — then the 4 campaign steps, the services, the event types and the full FAQ.
+
+### Apache side (`public/.htaccess`)
+
+Forces HTTPS, collapses `/index.html`, `/contact/index.html` and `/contact/` to
+one canonical spelling with 301s, serves `/contact` from the prerendered file
+without a trailing-slash redirect (`DirectorySlash Off`), sets `ErrorDocument
+404`, gzips text responses, and caches fingerprinted JS/CSS forever while keeping
+HTML and the crawl files revalidating — a year-cached `sitemap.xml` would pin
+search engines to a dead build.
+
+### Still to do (needs information we don't have)
+
+- **LinkedIn**: `SITE.linkedin` in `src/lib/site.js` is empty. Set it and the icon
+  appears in the footer and on the contact page, and the URL joins the
+  `Organization`'s `sameAs` — nothing else to edit. (Instagram is wired up:
+  `@wota_tech`.) `sameAs` is how search and AI engines confirm the brand is one
+  real entity rather than a name that happens to match.
+- If a street address ever exists, upgrade the `Organization` node to
+  `LocalBusiness` with a `PostalAddress` and geo coordinates.
+- Submit `https://home.wota.africa/sitemap.xml` in Google Search Console and Bing
+  Webmaster Tools once the domain is verified.
+- The footer's Terms / Privacy / Cookie links point at `#`. Real policy pages are
+  a trust signal engines look for on a commercial site.
 
 ## Not part of this site
 

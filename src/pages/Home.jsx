@@ -1,3 +1,4 @@
+import Seo from '../components/Seo';
 import Hero from '../components/Hero';
 import Features from '../components/Features';
 import Steps from '../components/Steps';
@@ -10,7 +11,8 @@ import Cta from '../components/Cta';
 // The marketing homepage — all the scrolling sections in order.
 export default function Home() {
   return (
-    <>
+    <main>
+      <Seo page="home" />
       <Hero />
       <Features />
       <Steps />
@@ -19,6 +21,6 @@ export default function Home() {
       <Gallery />
       <FaqDashboard />
       <Cta />
-    </>
+    </main>
   );
 }

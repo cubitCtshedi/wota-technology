@@ -4,6 +4,7 @@ import Nav from './components/Nav';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Contact from './pages/Contact';
+import NotFound from './pages/NotFound';
 
 // On every route change: jump to the top, unless the URL carries a #hash
 // (then scroll that section into view once the page has painted).
@@ -30,6 +31,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </>

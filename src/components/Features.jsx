@@ -11,18 +11,21 @@ const cards = [
     ),
     body: 'A full-wrap label designed around your identity or event theme — your look and feel, on something every guest actually wants.',
     img: '/assets/Front-of-bottle.png',
+    alt: 'Front label of a WOTA bottle carrying a client brand full-wrap design',
   },
   {
     cls: 'c2',
     title: 'The Smart QR Code',
     body: 'Links to your programme, menu, offer or sign-up page — and counts every single scan, so your message travels and reports back.',
     img: '/assets/NO-LOGO.png',
+    alt: 'Back label of a WOTA bottle showing the trackable smart QR code',
   },
   {
     cls: 'c3',
     title: 'Sponsor Real Estate',
     body: 'Partner and sponsor logos printed on the back label alongside the barcode and ingredients — guaranteed hand-held visibility all event long.',
     img: '/assets/NO-QR-CODE.png',
+    alt: 'Back label of a WOTA bottle with sponsor logos printed beside the barcode',
   },
 ];
 
@@ -51,7 +54,7 @@ export default function Features() {
                 <p>{c.body}</p>
               </div>
               <div className="card-media">
-                <img src={c.img} alt="" />
+                <img src={c.img} alt={c.alt} loading="lazy" />
               </div>
             </Reveal>
           ))}
