@@ -46,6 +46,12 @@ a{color:inherit}
 .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
 /* Visually hidden but readable by screen readers and crawlers — used for the
    hero <h1>, which the design expresses as artwork rather than text. */
+/* A hash link scrolls the section's top to y=0, which the fixed nav pill would
+   then cover. Offsetting by the pill's height lands the heading just below it —
+   and keeps the landing point above the scroll-spy trigger line, so the nav
+   lights up the section you just clicked. */
+section[id],header[id]{scroll-margin-top:84px}
+
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;line-height:1.12;font-weight:700}
 h2{font-size:clamp(1.7rem,3.4vw,2.5rem)}
@@ -87,6 +93,15 @@ nav .logo{color:#fff;font-size:1.5rem;gap:.5rem;letter-spacing:.04em}
 .nav-links a{text-decoration:none;font-family:var(--display);font-size:.82rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#fff;white-space:nowrap;text-shadow:0 1px 12px rgba(0,0,0,.35)}
 nav.scrolled .nav-links a{text-shadow:none}
 .nav-links a:hover{color:var(--cyan)}
+/* Scroll-spy: the link for the section currently under the nav. The dot sits
+   inside the pill (62px tall against ~12px of text), so it never clips. */
+.nav-links a{position:relative}
+.nav-links a::after{content:"";position:absolute;left:50%;bottom:-9px;width:4px;height:4px;
+  border-radius:50%;background:var(--cyan);
+  transform:translate(-50%,4px) scale(.4);opacity:0;
+  transition:opacity .25s ease,transform .25s ease}
+.nav-links a.active{color:var(--cyan)}
+.nav-links a.active::after{opacity:1;transform:translate(-50%,0) scale(1)}
 .nav-right{display:flex;align-items:center;justify-content:flex-end;gap:1.2rem}
 .nav-right .btn-line{padding:.62rem 1.35rem;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;border-radius:999px;border-color:rgba(74,186,183,.55);color:#fff}
 .nav-right .btn-line:hover{border-color:var(--cyan);background:rgba(74,186,183,.12)}
@@ -118,6 +133,9 @@ nav.scrolled .nav-links a{text-shadow:none}
     font-family:var(--display);font-weight:600;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;
     transition:background .18s ease,color .18s ease}
   .nav-mobile a:hover,.nav-mobile a:active{background:rgba(255,255,255,.08);color:var(--cyan)}
+  /* The dropdown covers the page, so mark the current section with a filled
+     row plus a leading rule rather than a dot the reader would have to hunt. */
+  .nav-mobile a.active{color:var(--cyan);background:rgba(74,186,183,.12);box-shadow:inset 3px 0 0 var(--cyan)}
 }
 @media(max-width:480px){
   .nav-inner{height:56px;padding:0 10px 0 18px;margin-top:12px}
